@@ -82,9 +82,18 @@ func (h *Handler) SignUp(c *fiber.Ctx) error {
 }
 
 func (h *Handler) GetClientDetails(c *fiber.Ctx) error {
+	user, ok := c.Locals(consts.UserLocalsKey).(*model.UserLocals)
+	if !ok {
+		return c.SendStatus(fiber.StatusUnauthorized)
+	}
+
 	request := model.GetClientDetailsRequest{}
 	if err := h.validateRequest(c, &request); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(model.IncorrectParamsCause{FailCause: err.Error()})
+	}
+
+	if user.UserID != request.ClientID && user.Role != "admin" {
+		return c.SendStatus(fiber.StatusUnauthorized)
 	}
 
 	response, err := h.uc.GetClientDetails(c.Context(), request)
