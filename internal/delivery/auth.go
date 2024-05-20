@@ -96,14 +96,14 @@ func (h *Handler) GetClientDetails(c *fiber.Ctx) error {
 }
 
 func (h *Handler) UpdateClientDetails(c *fiber.Ctx) error {
-	request := model.UpdateClientDetailsRequest{}
-	if err := h.validateRequest(c, &request); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(model.IncorrectParamsCause{FailCause: err.Error()})
-	}
-
 	user, ok := c.Locals(consts.UserLocalsKey).(*model.UserLocals)
 	if !ok {
 		return c.SendStatus(fiber.StatusUnauthorized)
+	}
+
+	request := model.UpdateClientDetailsRequest{}
+	if err := h.validateRequest(c, &request); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(model.IncorrectParamsCause{FailCause: err.Error()})
 	}
 
 	if user.UserID != request.ClientID { // && user.Role != "admin" {

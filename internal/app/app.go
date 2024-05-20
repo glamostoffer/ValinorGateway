@@ -11,6 +11,7 @@ import (
 	"github.com/glamostoffer/ValinorGateway/internal/usecase"
 	"github.com/glamostoffer/ValinorGateway/pkg/consts"
 	authclient "github.com/glamostoffer/ValinorProtos/auth"
+	chatclient "github.com/glamostoffer/ValinorProtos/chat"
 	"log/slog"
 )
 
@@ -41,8 +42,9 @@ func (a *App) Start(ctx context.Context) error {
 	log := a.log.With(slog.String("op", "app.Start"))
 
 	auth := authclient.New(a.cfg.AuthCfg)
+	chat := chatclient.New(a.cfg.ChatCfg)
 
-	useCase := usecase.New(auth)
+	useCase := usecase.New(auth, chat)
 
 	handler := delivery.New(a.cfg.RouteConfig, useCase)
 

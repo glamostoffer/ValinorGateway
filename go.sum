@@ -14,6 +14,8 @@ github.com/glamostoffer/ValinorProtos v0.0.2 h1:ciuHRO8BJrHdS7Ar/D2ZwgTcKFG+urL1
 github.com/glamostoffer/ValinorProtos v0.0.2/go.mod h1:PoGdEJUym4d9osfBzmcUTwp48jMsb3IDcFQV1ALEM6A=
 github.com/glamostoffer/ValinorProtos v0.0.3 h1:DGYuMEdXY1s+IoZ3facAaknVl6UcS65knpzA1GwrwOg=
 github.com/glamostoffer/ValinorProtos v0.0.3/go.mod h1:PoGdEJUym4d9osfBzmcUTwp48jMsb3IDcFQV1ALEM6A=
+github.com/glamostoffer/ValinorProtos v0.0.4-0.20240519211156-5e460b138691 h1:oI5TBZ1Nmh2++LQvRewITPnnVck6lYGAfSrD77FPBdI=
+github.com/glamostoffer/ValinorProtos v0.0.4-0.20240519211156-5e460b138691/go.mod h1:PoGdEJUym4d9osfBzmcUTwp48jMsb3IDcFQV1ALEM6A=
 github.com/go-logr/logr v1.2.2/go.mod h1:jdQByPbusPIv2/zmleS9BjJVeZ6kBagPoEUsqbVz/1A=
 github.com/go-logr/logr v1.4.1 h1:pKouT5E8xu9zeFC39JXRDukb6JFQPXM5p5I91188VAQ=
 github.com/go-logr/logr v1.4.1/go.mod h1:9T104GzyrTigFIr8wt5mBrctHMim0Nb2HLGrmQ40KvY=

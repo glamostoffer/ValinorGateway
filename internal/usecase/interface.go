@@ -7,6 +7,7 @@ import (
 
 type UseCase interface {
 	Auth
+	Room
 }
 
 type Auth interface {
@@ -26,4 +27,11 @@ type Auth interface {
 	SignIn(ctx context.Context, req model.SignInRequest) (model.SignInResponse, error)
 	GetClientDetails(ctx context.Context, req model.GetClientDetailsRequest) (model.GetClientDetailsResponse, error)
 	UpdateClientDetails(ctx context.Context, req model.UpdateClientDetailsRequest) error
+}
+
+type Room interface {
+	CreateRoom(ctx context.Context, req model.CreateRoomRequest) (roomID int64, err error)
+	GetListOfRooms(ctx context.Context, clientID int64) (rooms []model.Room, err error)
+	AddClientToRoom(ctx context.Context, req model.AddClientToRoomRequest) (err error)
+	RemoveClientFromRoom(ctx context.Context, req model.RemoveClientFromRoomRequest) (err error)
 }

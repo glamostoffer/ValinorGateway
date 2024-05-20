@@ -5,6 +5,7 @@ import (
 	"github.com/glamostoffer/ValinorGateway/internal/delivery"
 	"github.com/glamostoffer/ValinorGateway/internal/server"
 	authclient "github.com/glamostoffer/ValinorProtos/auth"
+	chatclient "github.com/glamostoffer/ValinorProtos/chat"
 	"github.com/ilyakaznacheev/cleanenv"
 	"os"
 	"time"
@@ -16,6 +17,7 @@ type Config struct {
 	Env          string            `yaml:"env"`
 	HTTPServer   server.Config     `yaml:"http_server"`
 	AuthCfg      authclient.Config `yaml:"auth"`
+	ChatCfg      chatclient.Config `yaml:"chat"`
 	RouteConfig  delivery.Config   `yaml:"route_config"`
 }
 
