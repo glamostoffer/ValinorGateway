@@ -7,12 +7,14 @@ import (
 )
 
 func (h *Handler) CreateRoom(c *fiber.Ctx) error {
-	//user, ok := c.Locals(consts.UserLocalsKey).(*model.UserLocals)
-	//if !ok {
-	//	return c.SendStatus(fiber.StatusUnauthorized)
-	//}
+	user, ok := c.Locals(consts.UserLocalsKey).(model.UserLocals)
+	if !ok {
+		return c.SendStatus(fiber.StatusUnauthorized)
+	}
 
-	request := model.CreateRoomRequest{}
+	request := model.CreateRoomRequest{
+		ClientID: user.UserID,
+	}
 	if err := h.validateRequest(c, &request); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(model.IncorrectParamsCause{FailCause: err.Error()})
 	}
@@ -26,7 +28,7 @@ func (h *Handler) CreateRoom(c *fiber.Ctx) error {
 }
 
 func (h *Handler) GetClientRooms(c *fiber.Ctx) error {
-	user, ok := c.Locals(consts.UserLocalsKey).(*model.UserLocals)
+	user, ok := c.Locals(consts.UserLocalsKey).(model.UserLocals)
 	if !ok {
 		return c.SendStatus(fiber.StatusUnauthorized)
 	}
@@ -40,19 +42,19 @@ func (h *Handler) GetClientRooms(c *fiber.Ctx) error {
 }
 
 func (h *Handler) AddClientToRoom(c *fiber.Ctx) error {
-	user, ok := c.Locals(consts.UserLocalsKey).(*model.UserLocals)
-	if !ok {
-		return c.SendStatus(fiber.StatusUnauthorized)
-	}
+	//user, ok := c.Locals(consts.UserLocalsKey).(model.UserLocals)
+	//if !ok {
+	//	return c.SendStatus(fiber.StatusUnauthorized)
+	//}
 
 	request := model.AddClientToRoomRequest{}
 	if err := h.validateRequest(c, &request); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(model.IncorrectParamsCause{FailCause: err.Error()})
 	}
 
-	if request.OwnerID != user.UserID {
-		return c.SendStatus(fiber.StatusUnauthorized)
-	}
+	//if request.OwnerID != user.UserID {
+	//	return c.SendStatus(fiber.StatusUnauthorized)
+	//}
 
 	err := h.uc.AddClientToRoom(c.Context(), request)
 	if err != nil {
@@ -63,7 +65,7 @@ func (h *Handler) AddClientToRoom(c *fiber.Ctx) error {
 }
 
 func (h *Handler) RemoveClientFromRoom(c *fiber.Ctx) error {
-	user, ok := c.Locals(consts.UserLocalsKey).(*model.UserLocals)
+	user, ok := c.Locals(consts.UserLocalsKey).(model.UserLocals)
 	if !ok {
 		return c.SendStatus(fiber.StatusUnauthorized)
 	}

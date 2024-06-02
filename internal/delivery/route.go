@@ -32,5 +32,10 @@ func MapRoutes(route fiber.Router, mw middleware.Middleware, h *Handler) {
 			room.Post("add", mw.ClientAuth, h.AddClientToRoom)
 			room.Post("remove", mw.ClientAuth, h.RemoveClientFromRoom)
 		}
+
+		messages := chat.Group("msg")
+		{
+			messages.Post("get", mw.ClientAuth, h.GetMessagesFromRoom)
+		}
 	}
 }

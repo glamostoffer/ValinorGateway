@@ -57,10 +57,12 @@ func (a *App) Start(ctx context.Context) error {
 		handler,
 		a.log,
 		auth,
+		chat,
 	)
 
 	a.components = append(a.components,
 		component{auth, "Auth Client"},
+		component{chat, "Chat Client"},
 		component{serv, "HTTP Server"},
 	)
 

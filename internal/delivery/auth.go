@@ -82,7 +82,7 @@ func (h *Handler) SignUp(c *fiber.Ctx) error {
 }
 
 func (h *Handler) GetClientDetails(c *fiber.Ctx) error {
-	user, ok := c.Locals(consts.UserLocalsKey).(*model.UserLocals)
+	user, ok := c.Locals(consts.UserLocalsKey).(model.UserLocals)
 	if !ok {
 		return c.SendStatus(fiber.StatusUnauthorized)
 	}
@@ -90,6 +90,10 @@ func (h *Handler) GetClientDetails(c *fiber.Ctx) error {
 	request := model.GetClientDetailsRequest{}
 	if err := h.validateRequest(c, &request); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(model.IncorrectParamsCause{FailCause: err.Error()})
+	}
+
+	if request.ClientID == 0 {
+		request.ClientID = user.UserID
 	}
 
 	if user.UserID != request.ClientID && user.Role != "admin" {
@@ -105,7 +109,7 @@ func (h *Handler) GetClientDetails(c *fiber.Ctx) error {
 }
 
 func (h *Handler) UpdateClientDetails(c *fiber.Ctx) error {
-	user, ok := c.Locals(consts.UserLocalsKey).(*model.UserLocals)
+	user, ok := c.Locals(consts.UserLocalsKey).(model.UserLocals)
 	if !ok {
 		return c.SendStatus(fiber.StatusUnauthorized)
 	}
@@ -113,6 +117,10 @@ func (h *Handler) UpdateClientDetails(c *fiber.Ctx) error {
 	request := model.UpdateClientDetailsRequest{}
 	if err := h.validateRequest(c, &request); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(model.IncorrectParamsCause{FailCause: err.Error()})
+	}
+
+	if request.ClientID == 0 {
+		request.ClientID = user.UserID
 	}
 
 	if user.UserID != request.ClientID { // && user.Role != "admin" {
@@ -143,14 +151,29 @@ func (h *Handler) SignIn(c *fiber.Ctx) error {
 	}
 
 	cookie := fiber.Cookie{
-		Name:    "accessToken",
+		Name:    "access",
 		Value:   response.Token,
 		Path:    "",
 		Domain:  "",
 		MaxAge:  0,
 		Expires: time.Now().Add(h.cfg.AccessTokenTTL),
 
-		// Пока похуй, но поменять будто надо
+		Secure:      false,
+		HTTPOnly:    false,
+		SameSite:    "",
+		SessionOnly: false,
+	}
+
+	c.Cookie(&cookie)
+
+	cookie = fiber.Cookie{
+		Name:    "role",
+		Value:   response.Role,
+		Path:    "",
+		Domain:  "",
+		MaxAge:  0,
+		Expires: time.Now().Add(h.cfg.AccessTokenTTL),
+
 		Secure:      false,
 		HTTPOnly:    false,
 		SameSite:    "",

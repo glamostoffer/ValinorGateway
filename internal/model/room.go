@@ -18,9 +18,10 @@ type (
 	}
 
 	AddClientToRoomRequest struct {
-		RoomID   int64 `json:"roomID" validate:"required"`
-		OwnerID  int64 `json:"ownerID" validate:"required"`
-		ClientID int64 `json:"clientID" validate:"required"`
+		RoomID int64 `json:"roomID" validate:"required"`
+		//OwnerID  int64 `json:"ownerID" validate:"required"`
+		//ClientID int64 `json:"clientID" validate:"required"`
+		ClientLogin string `json:"clientLogin" validate:"required"`
 	}
 
 	RemoveClientFromRoomRequest struct {

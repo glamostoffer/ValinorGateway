@@ -76,10 +76,11 @@ type (
 	}
 	SignInResponse struct {
 		Token string `json:"token"`
+		Role  string `json:"role"`
 	}
 
 	GetClientDetailsRequest struct {
-		ClientID int64 `json:"clientID" validate:"required"`
+		ClientID int64 `json:"clientID"`
 	}
 	GetClientDetailsResponse struct {
 		Login     string `json:"login"`
@@ -89,7 +90,7 @@ type (
 	}
 
 	UpdateClientDetailsRequest struct {
-		ClientID int64   `json:"clientID" validate:"required"`
+		ClientID int64   `json:"clientID"`
 		Login    *string `json:"login"`
 		Password *string `json:"password"`
 	}

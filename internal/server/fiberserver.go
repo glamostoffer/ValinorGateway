@@ -6,8 +6,10 @@ import (
 	"github.com/glamostoffer/ValinorGateway/internal/delivery"
 	"github.com/glamostoffer/ValinorGateway/internal/middleware"
 	"github.com/glamostoffer/ValinorGateway/internal/usecase"
-	authclient "github.com/glamostoffer/ValinorProtos/auth"
+	"github.com/glamostoffer/ValinorProtos/auth"
+	"github.com/glamostoffer/ValinorProtos/chat"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 	"log/slog"
 	"time"
 )
@@ -19,7 +21,8 @@ type FiberServer struct {
 	uc      usecase.UseCase
 	handler *delivery.Handler
 	logger  *slog.Logger
-	auth    *authclient.Connector
+	auth    *auth.Connector
+	chat    *chat.Connector
 }
 
 func New(
@@ -28,7 +31,8 @@ func New(
 	uc usecase.UseCase,
 	handler *delivery.Handler,
 	logger *slog.Logger,
-	auth *authclient.Connector,
+	auth *auth.Connector,
+	chat *chat.Connector,
 ) *FiberServer {
 	return &FiberServer{
 		cfg: cfg,
@@ -42,19 +46,27 @@ func New(
 		handler: handler,
 		logger:  logger,
 		auth:    auth,
+		chat:    chat,
 	}
 }
 
 func (f *FiberServer) Start(ctx context.Context) error {
 	log := f.logger.With(slog.String("op", "server.Start"))
 
-	// f.fb.Use(cors)
+	f.fb.Use(cors.New(
+		cors.Config{
+			AllowOrigins:     f.cfg.AllowOrigins,
+			AllowCredentials: true,
+			AllowHeaders:     f.cfg.AllowHeaders,
+			ExposeHeaders:    f.cfg.ExposeHeaders,
+		},
+	))
 
 	route := f.fb.Group("/")
 	delivery.MapRoutes(route, f.mw, f.handler)
 
 	go func() {
-		if err := f.fb.Listen(f.cfg.Host); err != nil {
+		if err := f.fb.Listen(f.cfg.Host + ":" + f.cfg.Port); err != nil {
 			log.Error(err.Error())
 			panic(err.Error())
 		}
@@ -63,7 +75,7 @@ func (f *FiberServer) Start(ctx context.Context) error {
 	return nil
 }
 
-func (f *FiberServer) Stop(ctx context.Context) error {
+func (f *FiberServer) Stop(_ context.Context) error {
 	log := f.logger.With(slog.String("op", "server.Stop"))
 
 	okCh, errCh := make(chan struct{}), make(chan error)

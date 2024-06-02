@@ -8,6 +8,7 @@ import (
 type UseCase interface {
 	Auth
 	Room
+	Message
 }
 
 type Auth interface {
@@ -34,4 +35,8 @@ type Room interface {
 	GetListOfRooms(ctx context.Context, clientID int64) (rooms []model.Room, err error)
 	AddClientToRoom(ctx context.Context, req model.AddClientToRoomRequest) (err error)
 	RemoveClientFromRoom(ctx context.Context, req model.RemoveClientFromRoomRequest) (err error)
+}
+
+type Message interface {
+	GetMessagesFromRoom(ctx context.Context, roomID int64) (messages []model.Message, err error)
 }

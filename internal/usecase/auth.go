@@ -144,6 +144,7 @@ func (uc *useCase) SignIn(
 
 	return model.SignInResponse{
 		Token: out.GetToken(),
+		Role:  out.GetRole(),
 	}, nil
 }
 

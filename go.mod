@@ -4,7 +4,7 @@ go 1.22.2
 
 require (
 	github.com/fatih/color v1.16.0
-	github.com/glamostoffer/ValinorProtos v0.0.4-0.20240519211156-5e460b138691
+	github.com/glamostoffer/ValinorProtos v0.0.4-0.20240602120030-23fb89aab418
 	github.com/go-playground/validator/v10 v10.20.0
 	github.com/gofiber/fiber/v2 v2.52.4
 	github.com/ilyakaznacheev/cleanenv v1.5.0

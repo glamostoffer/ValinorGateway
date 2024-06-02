@@ -19,3 +19,19 @@ func RoomsListFromProto(protoRooms []*client_chat.Room) []model.Room {
 
 	return rooms
 }
+
+func MessagesFromProto(protoMessages []*client_chat.Message) []model.Message {
+	messages := make([]model.Message, 0, len(protoMessages))
+
+	for _, msg := range protoMessages {
+		messages = append(messages, model.Message{
+			RoomID:   msg.RoomID,
+			ClientID: msg.ClientID,
+			Content:  msg.Message,
+			SentAt:   msg.SentAt,
+			Username: msg.Username,
+		})
+	}
+
+	return messages
+}

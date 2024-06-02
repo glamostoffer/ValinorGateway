@@ -4,6 +4,7 @@ import (
 	"context"
 	"github.com/glamostoffer/ValinorGateway/internal/model"
 	"github.com/glamostoffer/ValinorGateway/utils/convert"
+	auth "github.com/glamostoffer/ValinorProtos/auth/admin_auth"
 	client "github.com/glamostoffer/ValinorProtos/chat/client_chat"
 )
 
@@ -31,9 +32,14 @@ func (uc *useCase) GetListOfRooms(ctx context.Context, clientID int64) (rooms []
 }
 
 func (uc *useCase) AddClientToRoom(ctx context.Context, req model.AddClientToRoomRequest) (err error) {
+	authResponse, err := uc.auth.AdminAuth.GetClientIDByLogin(ctx, &auth.GetClientIDByLoginRequest{Login: req.ClientLogin})
+	if err != nil {
+		return err
+	}
+
 	_, err = uc.chat.ClientChat.AddClientToRoom(ctx, &client.AddClientToRoomRequest{
 		RoomID:   req.RoomID,
-		ClientID: req.ClientID,
+		ClientID: authResponse.GetClientID(),
 	})
 
 	return err
